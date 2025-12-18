@@ -1,10 +1,7 @@
-#!/usr/bin/env python3
-"""
-Module for Shapes, Interfaces, and Duck Typing
+#!/usr/bin/python3
 
-This module defines an abstract Shape class using Python's ABC package,
-implements concrete subclasses Circle and Rectangle, and demonstrates
-duck typing with a shape_info function.
+"""
+Shapes, Interfaces, and Duck Typing
 """
 
 from abc import ABC, abstractmethod
@@ -13,113 +10,104 @@ import math
 
 class Shape(ABC):
     """
-    Abstract base class for all shapes.
+    Shape Abstract method to build geometric shape
 
-    This class defines the interface that all shape subclasses must implement.
+    Args:
+        ABC (class): Baseclass to build abstract method
     """
-
     @abstractmethod
     def area(self):
         """
-        Abstract method that must be implemented by subclasses.
-
-        Returns:
-            float: The area of the shape.
+        area empty (set up the abstrat method)
         """
         pass
 
     @abstractmethod
     def perimeter(self):
         """
-        Abstract method that must be implemented by subclasses.
-
-        Returns:
-            float: The perimeter of the shape.
+        perimeter empty (set up the abstrat method)
         """
         pass
 
 
 class Circle(Shape):
     """
-    Circle class that inherits from Shape.
+    Circle Class representing a circle shape
+        inherit from abstract method Shape
 
-    Implements the area and perimeter methods for a circle.
+    Args:
+        radius (int): The radius of the circle.
     """
 
     def __init__(self, radius):
         """
-        Initialize a Circle with the given radius.
+        __init__ Build the object
 
         Args:
-            radius (float): The radius of the circle.
+            radius (int): Radius of the circle
         """
         self.radius = radius
 
     def area(self):
         """
-        Calculate and return the area of the circle.
+        area calculation = pi * r^2
 
         Returns:
-            float: The area of the circle (π * r²).
+            int: area of the circle
         """
-        return math.pi * (self.radius ** 2)
+        result = math.pi * self.radius ** 2
+        return (result)
 
     def perimeter(self):
         """
-        Calculate and return the perimeter (circumference) of the circle.
+        perimeter calculation = 2 * pi * r
 
         Returns:
-            float: The perimeter of the circle (2 * π * r).
+            int: perimeter
         """
-        return 2 * (math.pi * self.radius)
+        result = 2 * math.pi * self.radius
+        return (result)
 
 
 class Rectangle(Shape):
     """
-    Rectangle class that inherits from Shape.
+    Rectangle Class representing a rectangle shape
+        inherit from abstract method Shape
 
-    Implements the area and perimeter methods for a rectangle.
+    Args:
+        width (int): The width of the rectangle.
+        height (int): The height of the rectangle.
     """
 
     def __init__(self, width, height):
         """
-        Initialize a Rectangle with the given width and height.
+        __init__ Constructor of the rectangle
 
         Args:
-            width (float): The width of the rectangle.
-            height (float): The height of the rectangle.
+            width (int): width
+            height (int): height
         """
         self.width = width
         self.height = height
 
     def area(self):
-        """
-        Calculate and return the area of the rectangle.
-
-        Returns:
-            float: The area of the rectangle (width * height).
-        """
-        return (self.width * self.height)
+        """ Area calculation = W * H """
+        return self.width * self.height
 
     def perimeter(self):
-        """
-        Calculate and return the perimeter of the rectangle.
-
-        Returns:
-            float: The perimeter of the rectangle (2 * (width + height)).
-        """
-        return 2 * (self.width + self.height)
+        """ Perimeter calculation = 2*W + 2*H """
+        return (self.width * 2) + (self.height * 2)
 
 
-def shape_info(shape):
+def shape_info(item):
     """
-    Print the area and perimeter of a shape using duck typing.
-
-    This function relies on duck typing - it doesn't check the type of the
-    shape parameter, but simply calls its area() and perimeter() methods.
+    shape_info Retrieve information about a shape
 
     Args:
-        shape: Any object that implements area() and perimeter() methods.
+        item (obj): Instance of a shape
     """
-    print(f"Area: {shape.area()}")
-    print(f"Perimeter: {shape.perimeter()}")
+    result_area = item.area()
+    result_perimeter = item.perimeter()
+
+    print(f"Area: {result_area}")
+    print(f"Perimeter: {result_perimeter}")
