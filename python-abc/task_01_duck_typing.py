@@ -1,113 +1,83 @@
 #!/usr/bin/python3
 
 """
-Shapes, Interfaces, and Duck Typing
+Duck typing - an object-oriented programming term used to refer to the application of
 """
 
 from abc import ABC, abstractmethod
-import math
 
 
 class Shape(ABC):
     """
-    Shape Abstract method to build geometric shape
-
-    Args:
-        ABC (class): Baseclass to build abstract method
+    Class Shape
     """
     @abstractmethod
     def area(self):
         """
-        area empty (set up the abstrat method)
+        area method
         """
         pass
 
     @abstractmethod
     def perimeter(self):
         """
-        perimeter empty (set up the abstrat method)
+        perimeter method
         """
         pass
 
 
 class Circle(Shape):
     """
-    Circle Class representing a circle shape
-        inherit from abstract method Shape
-
-    Args:
-        radius (int): The radius of the circle.
+    Class Circle
     """
 
     def __init__(self, radius):
         """
-        __init__ Build the object
-
-        Args:
-            radius (int): Radius of the circle
+        Initializes a new Circle instance.
         """
-        self.radius = radius
+        self.__radius = abs(radius)
 
     def area(self):
         """
-        area calculation = pi * r^2
-
-        Returns:
-            int: area of the circle
+        area method
         """
-        result = math.pi * self.radius ** 2
-        return (result)
+        return 3.141592653589793 * self.__radius ** 2
 
     def perimeter(self):
         """
-        perimeter calculation = 2 * pi * r
-
-        Returns:
-            int: perimeter
+        perimeter method
         """
-        result = 2 * math.pi * self.radius
-        return (result)
+        return 2 * 3.141592653589793 * self.__radius
 
 
 class Rectangle(Shape):
     """
-    Rectangle Class representing a rectangle shape
-        inherit from abstract method Shape
-
-    Args:
-        width (int): The width of the rectangle.
-        height (int): The height of the rectangle.
+    Class Rectangle
     """
 
     def __init__(self, width, height):
         """
-        __init__ Constructor of the rectangle
-
-        Args:
-            width (int): width
-            height (int): height
+        Initializes a new Rectangle instance.
         """
-        self.width = width
-        self.height = height
+        self.__width = width
+        self.__height = height
 
     def area(self):
-        """ Area calculation = W * H """
-        return self.width * self.height
+        """
+        area method
+        """
+        return self.__width * self.__height
 
     def perimeter(self):
-        """ Perimeter calculation = 2*W + 2*H """
-        return (self.width * 2) + (self.height * 2)
+        """
+        perimeter method
+        """
+        return 2 * (self.__width + self.__height)
 
 
-def shape_info(item):
+def shape_info(shape):
     """
-    shape_info Retrieve information about a shape
-
-    Args:
-        item (obj): Instance of a shape
+    shape_info function
     """
-    result_area = item.area()
-    result_perimeter = item.perimeter()
-
-    print(f"Area: {result_area}")
-    print(f"Perimeter: {result_perimeter}")
+    print("Area: {}".format(shape.area()))
+    print("Perimeter: {}".format(shape.perimeter()))
