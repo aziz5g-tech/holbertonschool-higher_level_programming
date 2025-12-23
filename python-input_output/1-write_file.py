@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# 1-number_of_lines.py
+# 1-write_file.py
 # ABDULAZIZ ALRSHEDI <11937@holbertonschool.com>
 """Defines a text file line-counting function."""
 
