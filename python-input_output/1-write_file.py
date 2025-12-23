@@ -3,6 +3,7 @@
 # ABDULAZIZ ALRSHEDI <11937@holbertonschool.com>
 """Function to writes a string to a text file."""
 
+
 def write_file(filename="", text=""):
     '''
     Function to write a string and
