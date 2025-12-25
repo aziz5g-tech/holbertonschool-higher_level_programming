@@ -27,9 +27,9 @@ def main():
                 continue
 
             # Parse the line - try to get the last two integers
-            try:
-                parts = line.split()
-                if len(parts) >= 2:
+            parts = line.split()
+            if len(parts) >= 2:
+                try:
                     # Get the last two parts as status code and file size
                     status_code = int(parts[-2])
                     file_size = int(parts[-1])
@@ -44,9 +44,9 @@ def main():
                         if line_count % 10 == 0:
                             print_stats(total_size, status_counts)
 
-            except (ValueError, IndexError):
-                # Skip lines that don't have valid integers at the end
-                continue
+                except (ValueError, IndexError):
+                    # Skip lines that don't have valid integers
+                    pass
 
     except KeyboardInterrupt:
         pass
