@@ -48,12 +48,10 @@ def main():
                 continue
 
     except KeyboardInterrupt:
-        # Print final stats on CTRL+C
-        print_stats(total_size, status_counts)
+        pass
 
-    # Print final stats at the end if there are any processed lines
-    if line_count > 0:
-        print_stats(total_size, status_counts)
+    # Always print final stats at the end
+    print_stats(total_size, status_counts)
 
 
 if __name__ == "__main__":
