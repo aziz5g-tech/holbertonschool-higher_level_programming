@@ -1,66 +1,52 @@
 #!/usr/bin/python3
-"""
-Script that reads stdin line by line and computes metrics
-"""
 import sys
 
 
-def print_stats(total_size, status_counts):
-    """Print the current statistics"""
-    print(f"File size: {total_size}")
-    for status_code in sorted(status_counts.keys()):
-        if status_counts[status_code] > 0:
-            print(f"{status_code}: {status_counts[status_code]}")
+def print_info():
+    print('File size: {:d}'.format(file_size))
+
+    for scode, code_times in sorted(status_codes.items()):
+        if code_times > 0:
+            print('{}: {:d}'.format(scode, code_times))
 
 
-def main():
-    """Main function to process log lines and compute metrics"""
-    total_size = 0
-    status_counts = {200: 0, 301: 0, 400: 0,
-                     401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
-    line_count = 0
+status_codes = {
+    '200': 0,
+    '301': 0,
+    '400': 0,
+    '401': 0,
+    '403': 0,
+    '404': 0,
+    '405': 0,
+    '500': 0
+}
 
-    try:
-        for line in sys.stdin:
-            line = line.strip()
-            if not line:
-                continue
+lc = 0
+file_size = 0
 
-            # Parse the line
-            try:
-                # Look for the expected log format:
-                # <IP> - [<date>] "GET /projects/260 HTTP/1.1" <status> <size>
-                parts = line.split()
+try:
+    for line in sys.stdin:
+        if lc != 0 and lc % 10 == 0:
+            print_info()
 
-                # Must have at least status code and file size at the end
-                if len(parts) < 2:
-                    continue
+        pieces = line.split()
 
-                # Try to extract status code and file size from the end
-                status_code = int(parts[-2])
-                file_size = int(parts[-1])
+        try:
+            status = int(pieces[-2])
 
-                # Check if line contains the expected GET request pattern
-                if '"GET' in line and 'HTTP/1.1"' in line:
-                    # Update counters if status code is valid
-                    if status_code in status_counts:
-                        status_counts[status_code] += 1
-                        total_size += file_size
-                        line_count += 1
+            if str(status) in status_codes.keys():
+                status_codes[str(status)] += 1
+        except:
+            pass
 
-                        # Print stats every 10 lines
-                        if line_count % 10 == 0:
-                            print_stats(total_size, status_counts)
-            except (ValueError, IndexError):
-                # Skip invalid lines
-                continue
+        try:
+            file_size += int(pieces[-1])
+        except:
+            pass
 
-    except KeyboardInterrupt:
-        pass
+        lc += 1
 
-    # Always print final stats at the end
-    print_stats(total_size, status_counts)
-
-
-if __name__ == "__main__":
-    main()
+    print_info()
+except KeyboardInterrupt:
+    print_info()
+    raise
