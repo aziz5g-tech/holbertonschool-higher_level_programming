@@ -23,7 +23,7 @@ if __name__ == "__main__":
         for line in sys.stdin:
             try:
                 parts = line.split()
-                if len(parts) >= 2:
+                if len(parts) > 2:
                     status_code = int(parts[-2])
                     file_size = int(parts[-1])
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
                     if line_count % 10 == 0:
                         print_stats(total_size, status_counts)
-            except:
+            except (ValueError, IndexError):
                 pass
     except KeyboardInterrupt:
         pass
