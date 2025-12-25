@@ -30,7 +30,7 @@ def main():
             try:
                 parts = line.split()
                 if len(parts) >= 2:
-                    # Get status code and file size (last two elements)
+                    # Try to get status code and file size (last two elements)
                     status_code = int(parts[-2])
                     file_size = int(parts[-1])
 
