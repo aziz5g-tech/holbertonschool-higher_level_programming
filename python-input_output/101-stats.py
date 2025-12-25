@@ -16,7 +16,8 @@ def print_stats(total_size, status_counts):
 def main():
     """Main function to process log lines and compute metrics"""
     total_size = 0
-    status_counts = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
+    status_counts = {200: 0, 301: 0, 400: 0,
+                     401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
     line_count = 0
 
     try:
@@ -32,6 +33,7 @@ def main():
                 if len(parts) < 2:
                     continue
 
+                # Try to get status code and file size from end
                 status_code = int(parts[-2])
                 file_size = int(parts[-1])
 
@@ -46,8 +48,26 @@ def main():
                         print_stats(total_size, status_counts)
 
             except (ValueError, IndexError):
-                # Skip lines that don't match the expected format
-                continue
+                # Try alternative parsing - maybe there are extra spaces
+                try:
+                    # Remove extra whitespace and try again
+                    clean_line = ' '.join(line.split())
+                    parts = clean_line.split()
+                    if len(parts) >= 2:
+                        status_code = int(parts[-2])
+                        file_size = int(parts[-1])
+
+                        if status_code in status_counts:
+                            status_counts[status_code] += 1
+                            total_size += file_size
+                            line_count += 1
+
+                            # Print stats every 10 lines
+                            if line_count % 10 == 0:
+                                print_stats(total_size, status_counts)
+                except (ValueError, IndexError):
+                    # Skip lines that don't match any expected format
+                    continue
 
     except KeyboardInterrupt:
         pass
