@@ -26,48 +26,27 @@ def main():
             if not line:
                 continue
 
-            # Parse the line according to the expected format
+            # Parse the line - try to get the last two integers
             try:
-                # Split by spaces and get the last two parts (status code and file size)
                 parts = line.split()
-                if len(parts) < 2:
-                    continue
+                if len(parts) >= 2:
+                    # Get the last two parts as status code and file size
+                    status_code = int(parts[-2])
+                    file_size = int(parts[-1])
 
-                # Try to get status code and file size from end
-                status_code = int(parts[-2])
-                file_size = int(parts[-1])
+                    # Only count if status code is in our valid list
+                    if status_code in status_counts:
+                        status_counts[status_code] += 1
+                        total_size += file_size
+                        line_count += 1
 
-                # Only count if status code is in our valid list
-                if status_code in status_counts:
-                    status_counts[status_code] += 1
-                    total_size += file_size
-                    line_count += 1
-
-                    # Print stats every 10 lines
-                    if line_count % 10 == 0:
-                        print_stats(total_size, status_counts)
+                        # Print stats every 10 lines
+                        if line_count % 10 == 0:
+                            print_stats(total_size, status_counts)
 
             except (ValueError, IndexError):
-                # Try alternative parsing - maybe there are extra spaces
-                try:
-                    # Remove extra whitespace and try again
-                    clean_line = ' '.join(line.split())
-                    parts = clean_line.split()
-                    if len(parts) >= 2:
-                        status_code = int(parts[-2])
-                        file_size = int(parts[-1])
-
-                        if status_code in status_counts:
-                            status_counts[status_code] += 1
-                            total_size += file_size
-                            line_count += 1
-
-                            # Print stats every 10 lines
-                            if line_count % 10 == 0:
-                                print_stats(total_size, status_counts)
-                except (ValueError, IndexError):
-                    # Skip lines that don't match any expected format
-                    continue
+                # Skip lines that don't have valid integers at the end
+                continue
 
     except KeyboardInterrupt:
         pass
