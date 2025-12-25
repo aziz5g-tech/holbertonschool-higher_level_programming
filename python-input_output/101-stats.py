@@ -28,12 +28,20 @@ def main():
 
             # Parse the line
             try:
+                # Look for the expected log format:
+                # <IP> - [<date>] "GET /projects/260 HTTP/1.1" <status> <size>
                 parts = line.split()
-                if len(parts) >= 2:
-                    # Try to get status code and file size (last two elements)
-                    status_code = int(parts[-2])
-                    file_size = int(parts[-1])
 
+                # Must have at least status code and file size at the end
+                if len(parts) < 2:
+                    continue
+
+                # Try to extract status code and file size from the end
+                status_code = int(parts[-2])
+                file_size = int(parts[-1])
+
+                # Check if line contains the expected GET request pattern
+                if '"GET' in line and 'HTTP/1.1"' in line:
                     # Update counters if status code is valid
                     if status_code in status_counts:
                         status_counts[status_code] += 1
