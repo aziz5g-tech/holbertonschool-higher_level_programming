@@ -1,92 +1,46 @@
-#!/usr/bin/python3
+from flask import Flask, request, jsonify
 
-"""
-Simple API using Python & Flask
-"""
-
-from flask import Flask, jsonify, request
-
-# Create a Flask application
 app = Flask(__name__)
+app.config['DEBUG'] = True
 
-# User dictionary for tests :
 users = {}
 
-
-@app.route("/")
+@app.route('/', methods=['GET'])
 def home():
-    """
-    Home Default root URL
-
-    Will return a simple message
-    """
     return "Welcome to the Flask API!"
 
-
-@app.route("/data")
+@app.route('/data', methods=['GET'])
 def get_data():
-    """
-    get_data
+    return jsonify(list(users.keys())), 200
 
-    Get data from /data
-
-    Returns:
-       dict: A dictionary containing the usernames
-    """
-
-    return jsonify(list(users.keys()))
-
-
-@app.route("/status")
-def get_status():
-    """
-    get_status
-    Get status from /status
-
-    Returns:
-        str : OK
-    """
-    return "OK"
-
-
-@app.route("/users/<username>")
-def get_user(username):
-    """
-    get_user
-
-    Args:
-        username (str): username to get
-
-    Returns:
-        user data
-    """
-    if username in users:
-        return jsonify(users[username])
-    else:
-        return jsonify({"error": "User not found"}), 404
-
-
-@app.route("/add_user", methods=["POST"])
+@app.route('/add_user', methods=['POST'])
 def add_user():
-    """
-    add_user
+    data = request.get_json()
 
-    add user with POST method
-
-    Returns:
-       user data successfully added
-    """
-    retrieved_data = request.get_json()
-
-    # Check if dictionnary contains a username key
-    if not retrieved_data or "username" not in retrieved_data:
+    if not data or 'username' not in data:
         return jsonify({"error": "Username is required"}), 400
 
-    username = retrieved_data["username"]
-    users[username] = retrieved_data
+    username = data['username']
+
+    users[username] = {
+        "username": username,
+        "name": data.get('name', ''),
+        "age": data.get('age', 0),
+        "city": data.get('city', '')
+    }
 
     return jsonify({"message": "User added", "user": users[username]}), 201
 
+@app.route('/users/<username>', methods=['GET'])
+def get_user(username):
+    if username in users:
+        return jsonify(users[username]), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
 
-if __name__ == "__main__":
+@app.route('/status', methods=['GET'])
+def get_status():
+    return "OK"
+
+if __name__ == '__main__':
     app.run()
